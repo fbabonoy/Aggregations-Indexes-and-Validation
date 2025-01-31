@@ -82,4 +82,34 @@ router.get("/learner/:id/avg-class", async (req, res) => {
   else res.send(result).status(200);
 });
 
+
+router.get("/stats", async (req, res, next)=>{
+  let collection = await db.collection("grades");
+  // console.log(collection);
+  
+  let result = await collection.aggregate([
+    {
+      $unwind: { path: "$scores" },
+    }
+  ]).toArray();
+
+  console.log(result);
+  
+  if (!result) res.send("Not found").status(404);
+  else res.send(result).status(200);
+
+})
+
+
+// router.get("/stats/:id", (req, res, next)=>{
+  
+
+//   res.send({sk})
+
+// })
+
+
+
+
+
 export default router;
